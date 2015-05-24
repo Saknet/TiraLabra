@@ -1,13 +1,15 @@
 
 package filecompressor;
 
-import huffmancoding.HuffmanCompressor;
+import LZW.LZWCompression;
+import huffmancoding.HuffmanCompression;
+import java.io.IOException;
 
 public class FileCompressor {
 
-    public static void main(String[] args) {
-        HuffmanCompressor c = new HuffmanCompressor();
-//        String text = "abbcccdddd";
-//        c.run(text);
+    public static void main(String[] args) throws IOException {
+        HuffmanCompression hc = new HuffmanCompression();
+        LZWCompression lzwc = new LZWCompression();
+        lzwc.run(args[0]);
     }
 }
