@@ -1,6 +1,8 @@
 
 package huffmancoding;
 
+import IO.BinaryInput;
+import IO.BinaryOutput;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -15,7 +17,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class HuffmanCompressionTest {
-    HuffmanCompression hC = new HuffmanCompression();
+    HuffmanCompression hc = new HuffmanCompression();
+    TreeBuilder treeBuilder = new TreeBuilder();
     
     public HuffmanCompressionTest() {
     }
@@ -38,7 +41,7 @@ public class HuffmanCompressionTest {
     
     @Test
     public void createOutputTest() throws FileNotFoundException, IOException {
-        FileOutputStream fos = hC.createOutput("testfiles/huffmanfilecreatetest.txt");
+        FileOutputStream fos = hc.createOutput("testfiles/huffmanfilecreatetest.txt");
         String s = "jeesus pelastaa";
         fos.write(s.getBytes());
         fos.close();
@@ -55,7 +58,7 @@ public class HuffmanCompressionTest {
     
     @Test
     public void addFrequenciesTest() throws IOException {
-        HashMap<Character, Integer> freq = hC.addFrequencies("testfiles/huffmanfilefreqtest.txt");
+        HashMap<Character, Integer> freq = hc.addFrequencies("testfiles/huffmanfilefreqtest.txt");
         int as = freq.get('a');
         Assert.assertEquals(78, as);
         int empty = freq.get(' ');
@@ -64,60 +67,36 @@ public class HuffmanCompressionTest {
     } 
     
     @Test
-    public void addSymbolsToPQ() throws IOException {
-        HashMap<Character, Integer> freq = hC.addFrequencies("testfiles/huffmanfilefreqtest.txt");
-        PriorityQueue<Node> pq = hC.addSymbolsToPQ(freq);
-        Assert.assertEquals('/', pq.poll().getSymbol());
-        pq.poll();
-        Assert.assertEquals('B', pq.poll().getSymbol());
-        Assert.assertEquals(1, pq.poll().getFrequency());
-    }
-
-    @Test
-    public void buildTreeTest() throws IOException {
-        HashMap<Character, Integer> freq = hC.addFrequencies("testfiles/huffmanfilefreqtest.txt");
-        PriorityQueue<Node> pq = hC.addSymbolsToPQ(freq);
-        Node root = hC.buildTree(pq);
-        Assert.assertEquals(1329, root.getFrequency());
-        Assert.assertEquals(537, root.getLeft().getFrequency());
-        Assert.assertEquals(792, root.getRight().getFrequency());
-    }
-    
-    @Test
     public void readTreeTest() throws IOException {
-        HashMap<Character, Integer> freq = hC.addFrequencies("testfiles/huffmanfilefreqtest.txt");
-        PriorityQueue<Node> pq = hC.addSymbolsToPQ(freq);
-        Node root = hC.buildTree(pq);  
-        hC.readTree(root, "");
-        Assert.assertEquals("1111", hC.getcharToCode().get('e'));
-        Assert.assertNull(hC.getcharToCode().get('K'));
-        Assert.assertEquals("1011010", hC.getcharToCode().get('y'));
+        HashMap<Character, Integer> freq = hc.addFrequencies("testfiles/huffmanfilefreqtest.txt");
+        Node root = treeBuilder.makeTree(freq);  
+        hc.readTree(root, "");
+        Assert.assertEquals("1111", hc.getcharToCode().get('e'));
+        Assert.assertNull(hc.getcharToCode().get('K'));
+        Assert.assertEquals("1011010", hc.getcharToCode().get('y'));
     }
     
     @Test
-    public void writeTreeToFileTest() throws IOException {
-        HashMap<Character, Integer> freq = hC.addFrequencies("testfiles/huffmanfilefreqtest.txt");
-        PriorityQueue<Node> pq = hC.addSymbolsToPQ(freq);
-        Node root = hC.buildTree(pq);
-        FileOutputStream fos = hC.createOutput("testfiles/huffmantreetoFileTest.txt");
-        hC.writeTreeToFile(root, fos);
+    public void writeFrequenciesToFileTest() throws IOException {
+        HashMap<Character, Integer> freq = hc.addFrequencies("testfiles/huffmanfilefreqtest.txt");
+        Node root = treeBuilder.makeTree(freq);  
+        FileOutputStream fos = hc.createOutput("testfiles/huffmantreetoFileTest.txt");
+        BinaryOutput bo = new BinaryOutput(fos);
+        hc.writeFrequenciesToFile(freq, bo);
         fos.close();
         
         FileInputStream fis = new FileInputStream("testfiles/huffmantreetoFileTest.txt.huffman");
-        String s = "";
+        char c = 'a';
         while (fis.available() > 0) {
-            char c = (char) fis.read();
-            s = s + c;
+            c = (char) fis.read();
         }
         fis.close();
-        Assert.assertEquals("C7J8,8\"2:2k2S2p31l63\n" +
-        "32D4g4w4M4/1L1B1z1*4R8i65f33A8P8b9T9o68s70a78c38I10W1Z1F3v5m20r42=48t96."
-                + "12-6N3O3y12u13h52 198n55)3(3U3E4j14d31e116", s);
+        Assert.assertEquals('$', c);
     }
     
     @Test
-    public void runTest() throws IOException {
-        hC.run("testfiles/huffmanfilefreqtest.txt");
+    public void runAndCompressTest() throws IOException {
+        hc.run("testfiles/huffmanfilefreqtest.txt");
         FileInputStream fis = new FileInputStream("testfiles/huffmanfilefreqtest.txt.huffman");
         boolean pound = false;
         while (fis.available() > 0) {
@@ -130,6 +109,14 @@ public class HuffmanCompressionTest {
         
         Assert.assertTrue(pound);
     }
-
-
+    
+    @Test
+    public void writeFileTest() throws IOException {
+        HashMap<Character, Integer> freq = hc.addFrequencies("testfiles/readFrequenciesFromFile.txt");
+        hc.readTree(new TreeBuilder().makeTree(freq), "");
+        hc.writeFile(new BinaryOutput(hc.createOutput("testfiles/writeFileTest.txt")), 'c');
+        BinaryInput bi = new BinaryInput(new FileInputStream("testfiles/writeFileTest.txt"));
+        boolean bit = bi.readBit();
+        Assert.assertEquals(bit, true);
+    }
 }

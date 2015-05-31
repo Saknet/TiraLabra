@@ -4,6 +4,9 @@ package IO;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * Class used for writing binary data into the output stream.
+ */
 public class BinaryOutput {
     
     /**
@@ -23,6 +26,7 @@ public class BinaryOutput {
     
     /**
      * Creates binary output stream from OutputStream.
+     * 
      * @param out FileOutputStream, the OutputStream.
      */
     public BinaryOutput(FileOutputStream out) {
@@ -30,13 +34,15 @@ public class BinaryOutput {
     }
     
     /**
-     * Writes 12-bit integer to the output stream.
+     * Writes n-bit integer to the output stream.
+     * 
      * @param code being written as bits.
+     * @param n Integer
      * @throws IOException 
      */
-    public void write(int code) throws IOException {
-        for (int i = 0; i < 12; i++) {
-            boolean bit = ((code >>> (12 - i - 1)) & 1) == 1;
+    public void write(int code, int n) throws IOException {
+        for (int i = 0; i < n; i++) {
+            boolean bit = ((code >>> (n - i - 1)) & 1) == 1;
             writeBit(bit);
         }
     }
@@ -44,6 +50,7 @@ public class BinaryOutput {
     /**
      * Method, that writes a bit to the output stream. First adds bit to buffer, 
      * if there is 8 bits in buffer writes them out as a byte.
+     * 
      * @param bit boolean bit that is being written.
      * @throws IOException 
      */
@@ -60,6 +67,7 @@ public class BinaryOutput {
     }
     /**
      * Writes the bits which are left in buffer into output stream.
+     * 
      * @throws IOException 
      */
     public void clearBuffer() throws IOException {
@@ -76,6 +84,7 @@ public class BinaryOutput {
     
    /**
      * Clears buffer, flushes and closes the output stream. 
+     * 
      * @throws java.io.IOException
      */
     public void close() throws IOException {
@@ -83,4 +92,16 @@ public class BinaryOutput {
         fos.flush();
         fos.close();
     }     
+    
+    /**
+     * Used for writing 8-bit byte into output stream one bit at a time.
+     * @param x Integer value of the byte from 0 to 256.
+     * @throws IOException 
+     */
+    public void writeByte(int x) throws IOException {
+        for (int i = 0; i < 8; i++) {
+            boolean bit = ((x >>> (8 - i - 1)) & 1) == 1;
+            writeBit(bit);
+        }
+    }   
 }

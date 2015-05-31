@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
+import datastructures.ArrayList;
 import java.util.HashMap;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -16,6 +16,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class LZWDecompressionTest {
+    LZWCompression LZWC = new LZWCompression();
     LZWDecompression LZWD = new LZWDecompression();
     
     public LZWDecompressionTest() {
@@ -80,20 +81,68 @@ public class LZWDecompressionTest {
         Assert.assertEquals("jeesus", s);
     }
     
+    //testaa kaiken!
     @Test
-    public void decompressTest() throws FileNotFoundException, IOException {
-        FileOutputStream fos = new FileOutputStream("testfiles/lzwdecompresstest.txt.LZW");
-        HashMap<Integer, String> dictionary = LZWD.initializeDictionary();
-        ArrayList<Integer> codes = new ArrayList<>();
-        codes.add(2);
-        LZWD.decompress(fos, dictionary, codes);
-        FileInputStream fis = new FileInputStream("testfiles/lzwdecompresstest.txt.LZW");
-        String s = "";
+    public void runTest() throws IOException {
+        FileInputStream fisa = new FileInputStream("testfiles/lzwfulltest.txt");
+        String a = "";
+        while (fisa.available() > 0) {
+            char c = (char) fisa.read();
+            a = a + c;
+        }
+        fisa.close();
+        
+        LZWC.run("testfiles/lzwfulltest.txt");
+        LZWD.run("testfiles/lzwfulltest.txt.LZW");
+        
+        FileInputStream fisb = new FileInputStream("testfiles/lzwfulltest.txt.d");
+        String b = "";
+        while (fisb.available() > 0) {
+            char c = (char) fisb.read();
+            b = b + c;
+        }
+        fisb.close();
+        
+        Assert.assertEquals(a, b);
+    }      
+    
+    @Test
+    public void readFileTest() throws IOException {
+        LZWC.run("testfiles/hikikomori.txt");
+        ArrayList<Integer> codes = LZWD.readFile(new FileInputStream("testfiles/hikikomori.txt.LZW"));
+        int a = codes.get(0);
+        Assert.assertEquals((int) 'H', a);
+        int b = codes.get(3);
+        Assert.assertEquals(257, b);
+        int c = codes.get(9);
+        Assert.assertEquals((int) ' ', c);       
+    }
+    
+    @Test
+    public void decompressTest() throws IOException {
+        LZWC.run("testfiles/hikikomori.txt");
+        FileInputStream fis = new FileInputStream("testfiles/hikikomori.txt");
+        int count = 0;
+        
         while (fis.available() > 0) {
             char c = (char) fis.read();
-            s = s + c;
+            count++;
         }
         fis.close();
-        Assert.assertEquals("", s);
+        
+        FileOutputStream fos = LZWD.createOutput("testfiles/hikikomori.txt.LZW");
+        LZWD.decompress(fos, LZWD.initializeDictionary(), LZWD.readFile(new FileInputStream("testfiles/hikikomori.txt.LZW")));
+        
+        FileInputStream fisb = new FileInputStream("testfiles/hikikomori.txt.d");
+        int countb = 0;
+        
+        while (fisb.available() > 0) {
+            char c = (char) fisb.read();
+            countb++;
+        }
+        fisb.close();
+        
+        Assert.assertEquals(countb, count);
     }
+
 }

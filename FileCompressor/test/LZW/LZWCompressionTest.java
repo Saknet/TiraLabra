@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
+import datastructures.ArrayList;
 import java.util.HashMap;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -64,16 +64,7 @@ public class LZWCompressionTest {
         Assert.assertEquals("jeesus pelastaa", s);
     }
     
-    @Test
-    public void compressTest() throws IOException {
-        HashMap<String, Integer> dictionary = LZWC.initializeDictionary();
-        ArrayList<Integer> codes = LZWC.compress(dictionary, "testfiles/lzworiginalfile.txt");
-        int first = codes.get(0);
-        Assert.assertEquals(61, first);
-        int last = codes.get(codes.size() - 1);
-        Assert.assertEquals(502, last);
-    }
-    
+   
     @Test
     public void compressEmptyTest() throws IOException {
         HashMap<String, Integer> dictionary = LZWC.initializeDictionary();
@@ -101,8 +92,7 @@ public class LZWCompressionTest {
     @Test
     public void runTest() throws IOException {
         LZWC.run("testfiles/lzworiginalfile.txt");
-        
-                boolean dollar = false;
+        boolean dollar = false;
         FileInputStream fis = new FileInputStream("testfiles/lzworiginalfile.txt.LZW");
         while (fis.available() > 0) {
             if ((char) fis.read() == '$') {
@@ -111,6 +101,19 @@ public class LZWCompressionTest {
         }
         fis.close();
         Assert.assertTrue(dollar);
+    }
+    
+    @Test
+    public void compressTest() throws IOException {
+        ArrayList<Integer> codes = LZWC.compress(LZWC.initializeDictionary(),"testfiles/hikikomori.txt");
+        Assert.assertEquals(3842, codes.size());
+        int a = codes.get(0);
+        Assert.assertEquals((int) 'H', a);
+        int b = codes.get(3);
+        Assert.assertEquals(257, b);
+        int c = codes.get(9);
+        Assert.assertEquals((int) ' ', c);
+        
     }
 }
 

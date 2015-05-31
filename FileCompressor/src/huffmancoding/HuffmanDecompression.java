@@ -1,73 +1,110 @@
 
 package huffmancoding;
 
+import IO.BinaryInput;
+import IO.BinaryOutput;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.PriorityQueue;
 
-/**
- * täysin kesken oleva luokka, varmaan paljon tulee muuttumaan, ei myöskään testattu vielä.
-*/
 public class HuffmanDecompression {
-        
-//    public void run(String originalFile) throws FileNotFoundException, IOException {
-        
-//        HashMap<Character, Integer> frequencies = addFrequencies(originalFile);
-//        PriorityQueue<Node> pq = addSymbolsToPQ(frequencies);
-//        String newFile = "huffman";
-//        Node root = makeTree();
-
-//    }
-    
-//    public Node makeTree() throws IOException {
-//        PriorityQueue<Node> pq = new PriorityQueue<>();
-//       while (pq.size() > 1) {
-//            Node left = pq.poll();
-//            Node right = pq.poll();
-//            Node parent = new Node(left.getFrequency() + right.getFrequency(), left, right);
-//            pq.add(parent);
-//        }
-//        return pq.poll();
-//    }
-    
-        /**
-     * Method that adds character frequencies in the original file to HashMap. Not working and no time to fix yet.
-     * @param originalFile the Original file.
-     * @return frequencies HashMap<Character, Integer> contains symbols and its frequencies.   
-     * @throws java.io.IOException  
+           
+    /**
+     * The main method of decompressor. Starts all other methods needed for data decompression.
+     * 
+     * @param originalFile String the original file, which will be decompressed.
+     * @throws FileNotFoundException
+     * @throws IOException 
      */
-//    public HashMap<Character, Integer> addFrequencies(String originalFile) throws IOException {
-//        FileInputStream fis = new FileInputStream(originalFile);
-//        HashMap<Character, Integer> frequencies = new HashMap<>();
-//        String s = "";
-//        while ((char) fis.read() != '£') {
-//            char c = (char) fis.read();
-//            s = ""+ c;
-//        }
-//        fis.close();
-        
-//        for (int i = 0; i < s.length(); i++) {
-//            if (!Character.isDigit(s.charAt(i))) {
-//                frequencies.put(s.charAt(i), Integer.parseInt(""+s.charAt(i + 1)));
-//            }
-//        }
-        
-//        return frequencies;
-//    }
+    public void run(String originalFile) throws FileNotFoundException, IOException {
+        FileInputStream fis = new FileInputStream(originalFile);
+        BinaryInput bi = new BinaryInput(fis);
+        HashMap<Character, Integer> frequencies = readFrequenciesFromFile(bi);
+        TreeBuilder tree = new TreeBuilder();
+        Node root = tree.makeTree(frequencies);
+        FileOutputStream fos = createOutput(originalFile);
+        decompress(root, bi, fos);
+    }
     
     /**
-     * Method that adds frequencies of the symbols as nodes into priority queue.
-     * @param s
-     * @return 
+     * Decompresses the original data by finding the next symbol with findNextSymbol method and then 
+     * writes the symbol into output file. Symbol £ is used to mark the end of line.
+     * 
+     * @param node Node, the root node of Huffman's tree.
+     * @param bi BinaryInput, the input file stream.
+     * @param fos FileOutputStream, file output stream used for writing output file.
+     * @throws IOException 
      */
-//    public PriorityQueue<Node> addSymbolsToPQ(HashMap<Character, Integer> frequencies) {
-//        PriorityQueue<Node> pq = new PriorityQueue<>();
-//        for (Character c : frequencies.keySet()) {
-//            pq.add(new Node(c, frequencies.get(c)));
-//        }
-//        return pq;
-//    }
+    public void decompress(Node node, BinaryInput bi, FileOutputStream fos) throws IOException {
+        BinaryOutput bo = new BinaryOutput(fos);
+        while (true) {
+            char symbol = findNextSymbol(node, bi);
+            if (symbol == '£') {
+                break;
+            } else {
+                bo.writeByte(symbol);
+            }
+        }
+        bo.close();
+    }
+    
+    /**
+     * Method that uses Huffman's tree to find next symbol to be written into output file.
+     * @param node Node, the root of Huffman's tree.
+     * @param bi BinaryInput, the input stream, used for reading bits.
+     * @return returns the right symbol from Huffman's tree.
+     * @throws IOException 
+     */
+    public char findNextSymbol(Node node, BinaryInput bi) throws IOException {
+        if (node.getRight() == null) {
+            return node.getSymbol();            
+        } 
+        else if (bi.readBit()) {
+            return findNextSymbol(node.getRight(), bi);
+        } else {
+            return findNextSymbol(node.getLeft(), bi);
+        }
+    }
+    
+    /**
+     * Method that reads the symbols and their frequencies from input stream. Symbol $ 
+     * is used to mark the end of frequencies.
+     * 
+     * @param bi BinaryInput, the binary input stream of compressed file.
+     * @return frequencies, HashMap<Character, Integer>, contains symbols and its frequencies.
+     * @throws IOException 
+     */
+    public HashMap<Character, Integer> readFrequenciesFromFile(BinaryInput bi) throws IOException {
+        HashMap<Character, Integer> frequencies = new HashMap<>();   
+        while (true) {
+            char c = bi.readChar();
+            if (c == '$') {
+                break;
+            }
+            int freq = bi.readInt(32);
+            frequencies.put(c, freq);
+        }
+        return frequencies;
+    }
+    
+    /**
+     * Method that uses original file to make name for new file and returns 
+     * FileOutputStream for writing the new file.
+     * 
+     * @param originalFile String, the original file.
+     * @return fos FileOutputStream, used for output.
+     * @throws FileNotFoundException 
+     */  
+    public FileOutputStream createOutput(String originalFile) throws FileNotFoundException {
+        String newFile = "";
+        for (int i = 0; i < originalFile.length() - 7; i++) {
+            newFile += originalFile.charAt(i);
+        }
+        newFile += "h";     
+        FileOutputStream fos = new FileOutputStream(newFile);
+        return fos;
+    }
     
 }

@@ -2,16 +2,17 @@
 package LZW;
 
 import IO.BinaryOutput;
+import datastructures.ArrayList;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class LZWCompression {
     
     /** The main method of LZWcompression. Starts all other methods needed for data compression.
+     * 
      * @param originalFile the file that will be compressed.
      * @throws IOException 
      */
@@ -25,6 +26,7 @@ public class LZWCompression {
     /**
      * Method that uses original file name to make name for new file and returns 
      * FileOutputStream for the new file.
+     * 
      * @param originalFile String the original file, name of the file is used to make name for new file.
      * @return fos FileOutputStream used for output.
      * @throws FileNotFoundException 
@@ -44,8 +46,8 @@ public class LZWCompression {
     public void writeFile(ArrayList<Integer> codes, String originalFile) throws IOException {
         FileOutputStream fos = createOutput(originalFile);
         BinaryOutput bo = new BinaryOutput(fos);
-        for (Integer code : codes) {
-            bo.write(code);
+        for (int i = 0; i < codes.size(); i++) {
+            bo.write(codes.get(i), 12);
         }
         // just here to make testing easier, will get removed laster.
         fos.write('$');
@@ -64,9 +66,10 @@ public class LZWCompression {
         FileInputStream fis = new FileInputStream(originalFile);
         ArrayList<Integer> codes = new ArrayList<>();
         String w = "";
+        char c;
         int size = 256;
         while (fis.available() > 0) {
-            char c = (char) fis.read();
+            c = (char) fis.read();
             String wc = w + c;
             if (dictionary.containsKey(wc)) {
                 w = wc;
@@ -86,12 +89,13 @@ public class LZWCompression {
     
     /**
      * Initializes dictionary used by the algorithm.
+     * 
      * @return Initialized HashMap<String, Integer> dictionary.
      */
     public HashMap<String, Integer> initializeDictionary() {
         HashMap<String, Integer> dictionary = new HashMap<>();
         for (int i = 0; i < 256; i++) {
-            dictionary.put(""+ ((char) (i)), i);
+            dictionary.put(""+ (char) (i), i);
         }
         return dictionary;
     }
