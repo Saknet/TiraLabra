@@ -89,15 +89,9 @@ public class HashMap<K, V> {
      * @return 
      */
     public boolean containsKey(K key) {
-        if (hashMap[hash(key)] == null) {
-            return false;
-        } else {
-            Entry<K, V> temp = hashMap[hash(key)];
-            while (temp != null) {
-                if (temp.getKey().equals(key)) {
-                    return true;
-                }
-                temp = temp.getNext();
+        for (int i = 0; i < keySet.size(); i++) {
+            if (keySet.get(i).equals(key)) {
+                return true;
             }
         }
         return false;
@@ -109,6 +103,6 @@ public class HashMap<K, V> {
      * @return Integer
      */
     private int hash(K key) {
-        return key.hashCode() % size;
+        return Math.abs(key.hashCode() % size);
     }
 }

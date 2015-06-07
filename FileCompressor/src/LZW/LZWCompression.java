@@ -3,12 +3,11 @@ package LZW;
 
 import IO.BinaryOutput;
 import datastructures.ArrayList;
-
+import datastructures.HashMap;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 
 public class LZWCompression {
     

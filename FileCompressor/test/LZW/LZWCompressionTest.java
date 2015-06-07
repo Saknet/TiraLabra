@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import datastructures.ArrayList;
-import java.util.HashMap;
+import datastructures.HashMap;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
