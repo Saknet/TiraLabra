@@ -3,6 +3,7 @@ package LZW;
 
 import IO.BinaryOutput;
 import datastructures.ArrayList;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -47,7 +48,7 @@ public class LZWCompression {
         FileOutputStream fos = createOutput(originalFile);
         BinaryOutput bo = new BinaryOutput(fos);
         for (int i = 0; i < codes.size(); i++) {
-            bo.write(codes.get(i), 12);
+            bo.write(codes.get(i), 24);
         }
         // just here to make testing easier, will get removed laster.
         fos.write('$');

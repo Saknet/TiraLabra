@@ -1,8 +1,9 @@
 
 package huffmancoding;
 
-import java.util.HashMap;
-import java.util.PriorityQueue;
+import datastructures.ArrayList;
+import datastructures.HashMap;
+import datastructures.PriorityQueue;
 
 /**
  * Class used for building Huffman's tree
@@ -16,7 +17,7 @@ public class TreeBuilder {
      * @return root Node of Huffman's tree.
      */
     public Node makeTree(HashMap<Character, Integer> frequencies) {
-        PriorityQueue<Node> pq = addSymbolsToPQ(frequencies);
+        PriorityQueue pq = addSymbolsToPQ(frequencies);
         return buildTree(pq);
     }
     
@@ -26,10 +27,11 @@ public class TreeBuilder {
      * 
      * @return pq, filled priority queue.
      */
-    public PriorityQueue<Node> addSymbolsToPQ(HashMap<Character, Integer> frequencies) {
-        PriorityQueue<Node> pq = new PriorityQueue<>();
-        for (Character c : frequencies.keySet()) {
-            pq.add(new Node(c, frequencies.get(c)));
+    public PriorityQueue addSymbolsToPQ(HashMap<Character, Integer> frequencies) {
+        PriorityQueue pq = new PriorityQueue();
+        ArrayList<Character> keys = frequencies.keySet();
+        for (int i = 0; i < keys.size(); i++) {;
+            pq.add(new Node(keys.get(i), frequencies.get(keys.get(i))));
         }
         pq.add(new Node('£', 0));
         return pq;
@@ -41,7 +43,7 @@ public class TreeBuilder {
      * @param pq PriorityQueue, data structure used for creating the tree.
      * @return returns root of the tree.
      */
-    public Node buildTree(PriorityQueue<Node> pq) {
+    public Node buildTree(PriorityQueue pq) {
         while (pq.size() > 1) {
             Node left = pq.poll();
             Node right = pq.poll();

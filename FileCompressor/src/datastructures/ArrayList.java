@@ -37,7 +37,7 @@ public class ArrayList<E> {
     public void makeListBigger() {
         Object[] biggerList = new Object[list.length + 1];
         System.arraycopy(list, 0, biggerList, 0, size);
-        list = biggerList;        
+        list = biggerList; 
     }
     
     /**

@@ -2,11 +2,11 @@
 package huffmancoding;
 
 import IO.BinaryInput;
+import datastructures.HashMap;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;

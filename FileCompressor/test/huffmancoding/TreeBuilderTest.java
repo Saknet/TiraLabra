@@ -1,9 +1,9 @@
 
 package huffmancoding;
 
+import datastructures.HashMap;
+import datastructures.PriorityQueue;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.PriorityQueue;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -38,7 +38,7 @@ public class TreeBuilderTest {
     @Test
     public void addSymbolsToPQ() throws IOException {
         HashMap<Character, Integer> freq = hC.addFrequencies("testfiles/huffmanfilefreqtest.txt");
-        PriorityQueue<Node> pq = treeBuilder.addSymbolsToPQ(freq);
+        PriorityQueue pq = treeBuilder.addSymbolsToPQ(freq);
         Assert.assertEquals('£', pq.poll().getSymbol());
         pq.poll();
         Assert.assertEquals('/', pq.poll().getSymbol());
@@ -48,7 +48,7 @@ public class TreeBuilderTest {
     @Test
     public void buildTreeTest() throws IOException {
         HashMap<Character, Integer> freq = hC.addFrequencies("testfiles/huffmanfilefreqtest.txt");
-        PriorityQueue<Node> pq = treeBuilder.addSymbolsToPQ(freq);
+        PriorityQueue pq = treeBuilder.addSymbolsToPQ(freq);
         Node root = treeBuilder.buildTree(pq);
         Assert.assertEquals(1329, root.getFrequency());
         Assert.assertEquals(537, root.getLeft().getFrequency());

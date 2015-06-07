@@ -3,12 +3,11 @@ package huffmancoding;
 
 import IO.BinaryInput;
 import IO.BinaryOutput;
+import datastructures.HashMap;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.PriorityQueue;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -73,7 +72,7 @@ public class HuffmanCompressionTest {
         hc.readTree(root, "");
         Assert.assertEquals("1111", hc.getcharToCode().get('e'));
         Assert.assertNull(hc.getcharToCode().get('K'));
-        Assert.assertEquals("1011010", hc.getcharToCode().get('y'));
+        Assert.assertEquals("1011001", hc.getcharToCode().get('y'));
     }
     
     @Test

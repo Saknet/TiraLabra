@@ -3,11 +3,11 @@ package huffmancoding;
 
 import IO.BinaryInput;
 import IO.BinaryOutput;
+import datastructures.HashMap;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.HashMap;
+import java.io.IOException;;
 
 public class HuffmanDecompression {
            

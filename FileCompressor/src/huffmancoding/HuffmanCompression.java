@@ -2,11 +2,12 @@
 package huffmancoding;
 
 import IO.BinaryOutput;
+import datastructures.ArrayList;
+import datastructures.HashMap;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 
 /**
  * Class that compresses the file with Huffman's Code algorithm.
@@ -97,9 +98,10 @@ public class HuffmanCompression {
      * @throws java.io.IOException
     */
     public void writeFrequenciesToFile(HashMap<Character, Integer> frequencies, BinaryOutput bo) throws IOException {
-        for (char c: frequencies.keySet()) {
-            bo.writeByte(c);
-            int freq = frequencies.get(c);
+        ArrayList<Character> keys = frequencies.keySet();
+        for (int i = 0; i < keys.size(); i++) {
+            bo.writeByte(keys.get(i));
+            int freq = frequencies.get(keys.get(i));
             bo.write(freq, 32);
         }
         bo.writeByte('$');
