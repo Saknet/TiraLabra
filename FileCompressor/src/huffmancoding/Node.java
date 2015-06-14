@@ -5,7 +5,7 @@ package huffmancoding;
  * Class that represents a node in the huffman tree.
  */
 
-public class Node implements Comparable<Node> {
+public class Node {
     /**
      * char symbol, symbol in the node
      */
@@ -65,10 +65,5 @@ public class Node implements Comparable<Node> {
     
     public int getFrequency() {
         return this.frequency;
-    }
-
-    @Override
-    public int compareTo(Node t) {
-        return this.frequency - t.frequency;
     }
 }
