@@ -9,6 +9,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * Class that decompresses the file with LZW algorithm.
+ */
 public class LZWDecompression {
     
     /** The main method of LZWDecompression. Starts all other methods needed for data decompression.

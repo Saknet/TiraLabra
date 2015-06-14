@@ -36,7 +36,7 @@ public class HashMap<K, V> {
      */
     public void put(K key, V value) {
         int hash = hash(key);
-        Entry entry = hashMap[hash];
+        Entry<K, V> entry = hashMap[hash];
         if (!containsKey(key)) {
             keySet.add(key);
         }
@@ -69,17 +69,16 @@ public class HashMap<K, V> {
      * @return 
      */
     public V get(K key) {
-        Entry<K, V> entry = hashMap[hash(key)];
-        if (entry == null) {
-            return null;
-        }
-        while (entry.getKey().hashCode() != key.hashCode()) {
-            entry = entry.getNext();
-            if (entry == null) {
-                return null;
+        int hash = hash(key);
+        Entry<K, V> entry = hashMap[hash];
+ 
+        while(entry != null) {
+            if(entry.getKey().equals(key)) {
+                return entry.getValue();
             }
+            entry = entry.getNext();
         }
-        return entry.getValue();
+        return null;
     }
     
     /**
@@ -89,10 +88,14 @@ public class HashMap<K, V> {
      * @return 
      */
     public boolean containsKey(K key) {
-        for (int i = 0; i < keySet.size(); i++) {
-            if (keySet.get(i).equals(key)) {
+        int hash = hash(key);
+        Entry<K, V> entry = hashMap[hash];
+ 
+        while(entry != null) {
+            if(entry.getKey().equals(key)) {
                 return true;
             }
+            entry = entry.getNext();
         }
         return false;
     }

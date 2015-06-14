@@ -120,29 +120,33 @@ public class LZWDecompressionTest {
     
     @Test
     public void decompressTest() throws IOException {
-        LZWC.run("testfiles/hikikomori.txt");
         FileInputStream fis = new FileInputStream("testfiles/hikikomori.txt");
         int count = 0;
         
+        String a = "";
         while (fis.available() > 0) {
             char c = (char) fis.read();
+            a = a + c;
             count++;
         }
         fis.close();
-        
+        LZWC.run("testfiles/hikikomori.txt");
         FileOutputStream fos = LZWD.createOutput("testfiles/hikikomori.txt.LZW");
         LZWD.decompress(fos, LZWD.initializeDictionary(), LZWD.readFile(new FileInputStream("testfiles/hikikomori.txt.LZW")));
         
         FileInputStream fisb = new FileInputStream("testfiles/hikikomori.txt.d");
         int countb = 0;
         
+        String b = "";
         while (fisb.available() > 0) {
             char c = (char) fisb.read();
+            b = b + c;
             countb++;
         }
         fisb.close();
         
         Assert.assertEquals(countb, count);
+        Assert.assertEquals(a, b);
     }
 
 }

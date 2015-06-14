@@ -103,6 +103,7 @@ public class LZWCompressionTest {
         Assert.assertTrue(dollar);
     }
     
+    
     @Test
     public void compressTest() throws IOException {
         ArrayList<Integer> codes = LZWC.compress(LZWC.initializeDictionary(),"testfiles/hikikomori.txt");

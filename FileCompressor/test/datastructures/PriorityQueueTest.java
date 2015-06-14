@@ -43,8 +43,10 @@ public class PriorityQueueTest {
         PriorityQueue pq2 = new PriorityQueue();
         pq2.add(node1);
         pq2.add(node2);
-        Node biggest = pq2.poll();
-        Assert.assertEquals(2, biggest.getFrequency());
+        Assert.assertEquals(2, pq2.size());
+        Node smallest = pq2.poll();
+        Assert.assertEquals(2, smallest.getFrequency());
+        Assert.assertEquals(1, pq2.size());
     }
     
     @Test
@@ -59,5 +61,6 @@ public class PriorityQueueTest {
         }
         Node biggest = pq.poll();
         Assert.assertEquals(1329, biggest.getFrequency());
+        Assert.assertEquals(0, pq.size());
     }
 }
