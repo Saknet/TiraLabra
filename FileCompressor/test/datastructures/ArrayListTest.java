@@ -56,8 +56,6 @@ public class ArrayListTest {
     @Test
     public void initListTest() {
         ArrayList<String> list = new ArrayList();
-        list.init("1");
-        Assert.assertEquals("1", list.get(0));
-        Assert.assertEquals(1, list.size());
+        Assert.assertEquals(0, list.size());
     }
 }

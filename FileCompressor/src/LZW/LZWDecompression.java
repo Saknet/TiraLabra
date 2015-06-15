@@ -93,7 +93,7 @@ public class LZWDecompression {
      * @return Initialized HashMap<Integer, String> dictionary. 
      */
     public HashMap<Integer, String> initializeDictionary() {
-        HashMap<Integer, String>  dictionary = new HashMap<>();
+        HashMap<Integer, String>  dictionary = new HashMap<>(1024);
         for (int i = 0; i < 256; i++) {
             dictionary.put(i, "" + (char)i);
         }

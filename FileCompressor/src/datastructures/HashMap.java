@@ -16,7 +16,7 @@ public class HashMap<K, V> {
     /**
      * Size of the HashMap.
      */
-    private final int size = 256;
+    private int size = 0;
     
     /**
      * This ArrayList contains the key values of the HashMap.
@@ -24,6 +24,13 @@ public class HashMap<K, V> {
     private final ArrayList<K> keySet;
     
     public HashMap() {
+        this.size = 256;
+        this.hashMap = new Entry[size];
+        this.keySet = new ArrayList<>();
+    }
+    
+    public HashMap(int size) {
+        this.size = size;
         this.hashMap = new Entry[size];
         this.keySet = new ArrayList<>();
     }

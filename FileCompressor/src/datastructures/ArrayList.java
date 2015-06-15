@@ -11,7 +11,8 @@ public class ArrayList<E> {
     private int size;
     
     public ArrayList() {
-        this.size = 0;
+        this.list = new Object[10];
+        this.size = 0;  
     }
     
     /**
@@ -21,13 +22,11 @@ public class ArrayList<E> {
      * @param o Object, object that will be added into list.
      */
     public void add(Object o) {
-        if (size == 0) {
-            init(o);
-        } else {
+        if (size == list.length) {
             makeListBigger();
-            list[size] = o;
-            size++;
-        }
+        } 
+        list[size] = o;
+        size++;       
     }
     
     /**
@@ -35,21 +34,11 @@ public class ArrayList<E> {
      * list, then copies the old list into new one.
      */
     public void makeListBigger() {
-        Object[] biggerList = new Object[list.length + 1];
+        Object[] biggerList = new Object[list.length + 512];
         System.arraycopy(list, 0, biggerList, 0, size);
         list = biggerList; 
     }
     
-    /**
-     * Makes new list which size is 1 and adds o as its first element.
-     * 
-     * @param o Object.
-     */
-    public void init(Object o) {
-        this.list = new Object[1];
-        this.list[0] = o;
-        this.size++;      
-    }
     
     /**
      * Method used for getting element from list.

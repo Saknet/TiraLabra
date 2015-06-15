@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="localhost.localdomain" name="LZW.LZWCompressionTest" skipped="0" tests="6" time="0.189" timestamp="2015-06-14T21:32:08">
+<testsuite errors="0" failures="0" hostname="localhost.localdomain" name="LZW.LZWCompressionTest" skipped="0" tests="6" time="0.249" timestamp="2015-06-15T05:09:26">
   <properties>
     <property name="libs.jsp-compiler.javadoc" value="" />
     <property name="netbeans.autoupdate.country" value="US" />
@@ -62,7 +62,7 @@
     <property name="libs.j2me_common_ant.maven-pom" value="" />
     <property name="libs.spring-webmvc3.0.maven-pom" value="" />
     <property name="libs.swing-layout.maven-pom" value="" />
-    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner LZW.LZWCompressionTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/home/aandra/TiraLabra/TiraLabra/FileCompressor/build/test/results/TEST-LZW.LZWCompressionTest.xml crashfile=/home/aandra/TiraLabra/TiraLabra/FileCompressor/build/junitvmwatcher194734727057790982.properties propsfile=/home/aandra/TiraLabra/TiraLabra/FileCompressor/build/junit186597409902354525.properties" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner LZW.LZWCompressionTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/home/aandra/TiraLabra/TiraLabra/FileCompressor/build/test/results/TEST-LZW.LZWCompressionTest.xml crashfile=/home/aandra/TiraLabra/TiraLabra/FileCompressor/build/junitvmwatcher5064037209304199150.properties propsfile=/home/aandra/TiraLabra/TiraLabra/FileCompressor/build/junit6073562375564094941.properties" />
     <property name="build.classes.dir" value="build/classes" />
     <property name="netbeans.accept_license_class" value="org.netbeans.license.AcceptLicense" />
     <property name="build.sysclasspath" value="ignore" />
@@ -417,11 +417,11 @@
     <property name="awt.toolkit" value="sun.awt.X11.XToolkit" />
     <property name="libs.javaee-web-api-7.0.javadoc" value="/home/aandra/netbeans-8.0.2/enterprise/docs/javaee-doc-api.jar" />
   </properties>
-  <testcase classname="LZW.LZWCompressionTest" name="writeFileTest" time="0.044" />
-  <testcase classname="LZW.LZWCompressionTest" name="runTest" time="0.017" />
-  <testcase classname="LZW.LZWCompressionTest" name="compressTest" time="0.053" />
-  <testcase classname="LZW.LZWCompressionTest" name="createOutputTest" time="0.001" />
+  <testcase classname="LZW.LZWCompressionTest" name="writeFileTest" time="0.045" />
   <testcase classname="LZW.LZWCompressionTest" name="initializeDictionaryTest" time="0.001" />
+  <testcase classname="LZW.LZWCompressionTest" name="createOutputTest" time="0.0" />
+  <testcase classname="LZW.LZWCompressionTest" name="runTest" time="0.024" />
+  <testcase classname="LZW.LZWCompressionTest" name="compressTest" time="0.055" />
   <testcase classname="LZW.LZWCompressionTest" name="compressEmptyTest" time="0.0" />
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
