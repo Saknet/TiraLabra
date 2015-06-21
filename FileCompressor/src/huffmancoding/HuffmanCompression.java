@@ -117,7 +117,7 @@ public class HuffmanCompression {
      * Symbol £ is used to mark the end of compression.
      * 
      * @param originalFile String, the original file.
-     * @param fos FileOutputStream, used for output.
+     * @param dos DataOutputStream, used for output.
      * @param frequencies HashMap<Character, Integer>, contains symbols and their frequencies.
      * @throws IOException 
      */

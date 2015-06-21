@@ -44,7 +44,7 @@ public class ArrayList<E> {
      * Method used for getting element from list.
      * 
      * @param index Integer, the index of element requested.
-     * @return 
+     * @return (E) the element that is in requested index.
      */
     public E get(int index) {
         checkRange(index);

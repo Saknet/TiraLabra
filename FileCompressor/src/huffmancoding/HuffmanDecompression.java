@@ -38,7 +38,7 @@ public class HuffmanDecompression {
      * 
      * @param node Node, the root node of Huffman's tree.
      * @param bi BinaryInput, the input file stream.
-     * @param fos FileOutputStream, file output stream used for writing output file.
+     * @param dos DataOutputStream, file output stream used for writing output file.
      * @throws IOException 
      */
     public void decompress(Node node, BinaryInput bi, DataOutputStream dos) throws IOException {

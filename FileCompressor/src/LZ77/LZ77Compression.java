@@ -50,7 +50,7 @@ public class LZ77Compression {
      * The main main method for data compression.
      * 
      * @param originalFile String, the file that will be compressed.
-     * @param fos FileOutputStream. file output stream for the output.
+     * @param dos DataOutputStream. file output stream for the output.
      * @param bufferSize Integer, size of the buffer.
      * @throws IOException 
      */

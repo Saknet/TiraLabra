@@ -35,8 +35,8 @@ public class LZWDecompression {
     /**
      * The main method of decompressing LZW algorithm. Decompresses the codes and uses
      * writeFile method to write output file.
-     * 
-     * @param fos FileOutputStream, used for output.
+     * S
+     * @param dos DataOutputStream, used for output.
      * @param dictionary HashMap<Integer, String>, used for decompressing the file. 
      * @param codes ArrayList<Integer>, used for decompressing the file. 
      * @throws IOException 
@@ -106,7 +106,7 @@ public class LZWDecompression {
     /**
      * Reads chars from input stream and converts them to integer codes which get added into list for decompressing.
      * 
-     * @param fis FileInputStream, the input stream used for reading the compressed data.
+     * @param dis DataInputStream, the input stream used for reading the compressed data.
      * @return codes ArrayList<Integer>, used for decompressing the file. 
      * @throws IOException 
      */

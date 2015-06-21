@@ -73,7 +73,7 @@ public class HashMap<K, V> {
      * Returns the value associated with the specified key in the HashMap.
      * If the HashMap has no mapping for the key it returns null.
      * @param key K.
-     * @return 
+     * @return V, value that matches the Key.
      */
     public V get(K key) {
         int hash = hash(key);
@@ -92,7 +92,7 @@ public class HashMap<K, V> {
      * Checks if HashMap contains the key element. Returns true if it does,
      * false if it don't.
      * @param key K, the key element.
-     * @return 
+     * @return boolean.
      */
     public boolean containsKey(K key) {
         int hash = hash(key);
