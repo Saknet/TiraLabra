@@ -2,12 +2,14 @@
 package datastructuretests;
 
 import datastructures.ArrayList;
+import datastructures.HashMap;
 import huffmancoding.Node;
 import huffmancoding.TreeBuilder;
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.Random;
 
@@ -15,14 +17,14 @@ public class DataStructureTests {
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
         final long startTime = System.currentTimeMillis();
-        HashMap<Character, Integer> freq2 = addFrequencies("testfiles/bible.txt");
+        addFrequencies("testfiles/medium.txt");
         final long endTime = System.currentTimeMillis();
         System.out.println("Total execution time was:" + (endTime - startTime));
     }
     
     
     public static void arrayListReadme() throws FileNotFoundException, IOException {
-        FileInputStream fis = new FileInputStream("testfiles/README.TXT");
+        DataInputStream fis = new DataInputStream(new BufferedInputStream(new FileInputStream("testfiles/bible.txt")));
         ArrayList<Character> readmeList = new ArrayList<>();
         while (fis.available() > 0) {
             readmeList.add((char) fis.read());            
@@ -30,14 +32,14 @@ public class DataStructureTests {
         String s = "";
         for (int i  = 0; i < readmeList.size(); i++) {
             s = s + readmeList.get(i);
-        }        
+        }       
     }
     
     public static void arrayListMedium() throws FileNotFoundException, IOException {
-        FileInputStream fis = new FileInputStream("testfiles/medium.txt");
+        DataInputStream fis = new DataInputStream(new BufferedInputStream(new FileInputStream("testfiles/medium.txt")));
         ArrayList<Character> bible = new ArrayList<>();
         while (fis.available() > 0) {
-            bible.add((char) fis.read());            
+            bible.add((char) fis.read());  
         }
         String s = "";
         for (int i  = 0; i < bible.size(); i++) {
@@ -47,26 +49,18 @@ public class DataStructureTests {
     
     public static HashMap<Character, Integer> addFrequencies(String originalFile) throws IOException {
         Random rand = new Random();
-        FileInputStream fis = new FileInputStream(originalFile);
-        HashMap<Character, Integer> frequencies = new HashMap<>();
+        DataInputStream fis = new DataInputStream(new BufferedInputStream(new FileInputStream(originalFile)));
+        HashMap<Character, Integer> frequencies = new HashMap<>(65536);
         while (fis.available() > 0) {
             char c = (char) fis.read();
-            frequencies.put(c, rand.nextInt(Integer.MAX_VALUE));            
+            frequencies.put(c, rand.nextInt(Integer.MAX_VALUE)); 
+            int n = frequencies.get(c);
         }
         fis.close();
         
         return frequencies;
     }  
     
-    public static PriorityQueue<Node> addSymbolsToPQ(HashMap<Character, Integer> frequencies) {
-        PriorityQueue<Node> pq = new PriorityQueue<>();
-//        ArrayList<Character> keys = frequencies.keySet();
-//        for (int i = 0; i < keys.size(); i++) {;
-//            pq.add(new Node(keys.get(i), frequencies.get(keys.get(i))));
-//        }
-        pq.add(new Node('£', 0));
-        return pq;
-    }
     
     public static Node buildTree(PriorityQueue<Node> pq) {
         while (pq.size() > 1) {
