@@ -11,7 +11,7 @@ public class ArrayList<E> {
     private int size;
     
     public ArrayList() {
-        this.list = new Object[10];
+        this.list = new Object[256];
         this.size = 0;  
     }
     
@@ -34,7 +34,7 @@ public class ArrayList<E> {
      * list, then copies the old list into new one.
      */
     public void makeListBigger() {
-        Object[] biggerList = new Object[list.length + 512];
+        Object[] biggerList = new Object[list.length * 2];
         System.arraycopy(list, 0, biggerList, 0, size);
         list = biggerList; 
     }

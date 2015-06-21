@@ -1,6 +1,10 @@
 
 package IO;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -35,8 +39,8 @@ public class BinaryIOTest {
     @Test
     public void writingTest() throws IOException {
         try {
-            FileOutputStream fos = new FileOutputStream("testfiles/testoutput.txt");
-            BinaryOutput bo = new BinaryOutput(fos);
+            DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("testfiles/testoutput.txt")));
+            BinaryOutput bo = new BinaryOutput(dos);
             bo.clearBuffer();           
             bo.write(2132332423, 32);
             bo.write(123, 12);
@@ -48,8 +52,8 @@ public class BinaryIOTest {
         } catch (Exception e) {
         }
         
-        FileInputStream fis = new FileInputStream("testfiles/testoutput.txt");
-        BinaryInput bi = new BinaryInput(fis);
+        DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream("testfiles/testoutput.txt")));
+        BinaryInput bi = new BinaryInput(dis);
         int a = bi.readInt(32);
         Assert.assertEquals(2132332423, a);
         int b = bi.readInt(12);

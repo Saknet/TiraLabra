@@ -2,6 +2,10 @@
 package LZ77;
 
 import IO.BinaryInput;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,12 +20,13 @@ public class LZ77Decompression {
      * Used to start methods needed for file decompression.
      * 
      * @param originalFile the file that will be decompressed.
+     * @throws java.io.FileNotFoundException
      * @throws IOException 
      */
     public void run(String originalFile) throws FileNotFoundException, IOException {
-        FileInputStream fis = new FileInputStream(originalFile);
+        DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(originalFile)));
         FileOutputStream fos = createOutput(originalFile);
-        decompress(fis, fos);
+        decompress(dis, fos);
     }
     
     /**
@@ -36,29 +41,27 @@ public class LZ77Decompression {
         String newFile = "";
         for (int i = 0; i < originalFile.length() - 4; i++) {
             newFile += originalFile.charAt(i);
-        }
-        newFile += "7";     
-        FileOutputStream fos = new FileOutputStream(newFile);
-        return fos;
+        }     
+        
+        return new FileOutputStream(newFile + "7");
     }
     
     /**
      * Method that decompresses the input file and writes decompressed data into output.
      * 
-     * @param fis FileInputStream, the input stream.
-     * @param fos FileOutputStream, the output stream.
+     * @param dis DataInputStream, the input stream.
+     * @param fos
      * @throws IOException 
      */
-    public void decompress(FileInputStream fis, FileOutputStream fos) throws IOException {
-        BinaryInput bi = new BinaryInput(fis);
+    public void decompress(DataInputStream dis, FileOutputStream fos) throws IOException {
+        BinaryInput bi = new BinaryInput(dis);
         String s = "";
-        while (fis.available() > 0) {
+        while (dis.available() > 0) {
             char c = bi.readChar();
             if (c == '$') {
                 int distance = bi.readInt(8);
                 int length = bi.readInt(8);
                 s = writeMatch(s, distance, length, fos);
-                
             } else {
                 s = s + c;
                 fos.write(c);
@@ -72,7 +75,7 @@ public class LZ77Decompression {
      * @param s String, string that contains all characters that have been decompressed from input.
      * @param distance Integer, the distance of a match from current position.
      * @param length Integer, the length of the match.
-     * @param fos FileOutputStream, used for writing output file.
+     * @param fos
      * @return S String, the updated string.
      * @throws IOException 
      */

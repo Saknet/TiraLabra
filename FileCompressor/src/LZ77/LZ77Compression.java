@@ -2,6 +2,10 @@
 package LZ77;
 
 import IO.BinaryOutput;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -24,8 +28,8 @@ public class LZ77Compression {
      * @throws IOException 
      */
     public void run(String originalFile) throws IOException { 
-        FileOutputStream fos = createOutput(originalFile);
-        compress(originalFile, fos, 256);
+        DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(createOutput(originalFile)));
+        compress(originalFile, dos, 256);
     }
     
     /**
@@ -50,9 +54,9 @@ public class LZ77Compression {
      * @param bufferSize Integer, size of the buffer.
      * @throws IOException 
      */
-    public void compress(String originalFile, FileOutputStream fos, int bufferSize) throws IOException {
+    public void compress(String originalFile, DataOutputStream dos, int bufferSize) throws IOException {
         String data = readFile(originalFile);
-        BinaryOutput bo = new BinaryOutput(fos);
+        BinaryOutput bo = new BinaryOutput(dos);
         char[] dataArray = data.toCharArray();  
         char[] buffer = fillBuffer(dataArray, bufferSize);
         while (true) {
@@ -199,10 +203,10 @@ public class LZ77Compression {
      * @throws IOException 
      */
     public String readFile(String originalFile) throws IOException {
-        FileInputStream fis = new FileInputStream(originalFile);
+        DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(originalFile)));
         String s = "";
-        while (fis.available() > 0) {
-            char c = (char) fis.read();
+        while (dis.available() > 0) {
+            char c = (char) dis.read();
             s = s + c;
         }
         s = s + "\n";

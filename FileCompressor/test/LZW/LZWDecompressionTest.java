@@ -7,6 +7,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import datastructures.ArrayList;
 import datastructures.HashMap;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -67,10 +71,11 @@ public class LZWDecompressionTest {
     
     @Test
     public void writeFileTest() throws FileNotFoundException, IOException {
-        FileOutputStream fos = new FileOutputStream("testfiles/lzwdwritefiletest.txt");
-        LZWD.writeFile("jeesus", fos);
+        DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("testfiles/lzwdwritefiletest.txt")));
+        LZWD.writeFile("jeesus", dos);
+        dos.close();
         
-        FileInputStream fis = new FileInputStream("testfiles/lzwdwritefiletest.txt");
+        DataInputStream fis = new DataInputStream(new BufferedInputStream(new FileInputStream("testfiles/lzwdwritefiletest.txt")));
         String s = "";
         while (fis.available() > 0) {
             char c = (char) fis.read();
@@ -109,7 +114,7 @@ public class LZWDecompressionTest {
     @Test
     public void readFileTest() throws IOException {
         LZWC.run("testfiles/hikikomori.txt");
-        ArrayList<Integer> codes = LZWD.readFile(new FileInputStream("testfiles/hikikomori.txt.LZW"));
+        ArrayList<Integer> codes = LZWD.readFile(new DataInputStream(new BufferedInputStream(new FileInputStream("testfiles/hikikomori.txt.LZW"))));
         int a = codes.get(0);
         Assert.assertEquals((int) 'H', a);
         int b = codes.get(3);
@@ -131,8 +136,8 @@ public class LZWDecompressionTest {
         }
         fis.close();
         LZWC.run("testfiles/hikikomori.txt");
-        FileOutputStream fos = LZWD.createOutput("testfiles/hikikomori.txt.LZW");
-        LZWD.decompress(fos, LZWD.initializeDictionary(), LZWD.readFile(new FileInputStream("testfiles/hikikomori.txt.LZW")));
+        DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(LZWD.createOutput("testfiles/hikikomori.txt.LZW")));
+        LZWD.decompress(dos, LZWD.initializeDictionary(), LZWD.readFile(new DataInputStream(new BufferedInputStream(new FileInputStream("testfiles/hikikomori.txt.LZW")))));
         
         FileInputStream fisb = new FileInputStream("testfiles/hikikomori.txt.d");
         int countb = 0;

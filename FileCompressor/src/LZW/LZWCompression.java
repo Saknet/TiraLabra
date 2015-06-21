@@ -4,6 +4,10 @@ package LZW;
 import IO.BinaryOutput;
 import datastructures.ArrayList;
 import datastructures.HashMap;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -34,10 +38,8 @@ public class LZWCompression {
      * @return fos FileOutputStream used for output.
      * @throws FileNotFoundException 
      */   
-    public FileOutputStream createOutput(String originalFile) throws FileNotFoundException {
-        String newFile = originalFile + ".LZW";     
-        FileOutputStream fos = new FileOutputStream(newFile);
-        return fos;
+    public FileOutputStream createOutput(String originalFile) throws FileNotFoundException {          
+        return new FileOutputStream(originalFile + ".LZW");
     }
     
     /**
@@ -47,14 +49,15 @@ public class LZWCompression {
      * @throws IOException 
      */
     public void writeFile(ArrayList<Integer> codes, String originalFile) throws IOException {
-        FileOutputStream fos = createOutput(originalFile);
-        BinaryOutput bo = new BinaryOutput(fos);
+        DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(createOutput(originalFile)));
+        BinaryOutput bo = new BinaryOutput(dos);
         for (int i = 0; i < codes.size(); i++) {
             bo.write(codes.get(i), 24);
         }
-        // just here to make testing easier, will get removed laster.
-        fos.write('$');
+        // just here to make testing easier
+        dos.write('$');
         bo.close();
+        
     }
         
     /**
@@ -66,13 +69,13 @@ public class LZWCompression {
      * @throws IOException 
      */
     public ArrayList<Integer> compress(HashMap<String, Integer> dictionary, String originalFile) throws IOException {
-        FileInputStream fis = new FileInputStream(originalFile);
+        DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(originalFile)));
         ArrayList<Integer> codes = new ArrayList<>();
         String w = "";
         char c;
         int size = 256;
-        while (fis.available() > 0) {
-            c = (char) fis.read();
+        while (dis.available() > 0) {
+            c = (char) dis.read();
             String wc = w + c;
             if (dictionary.containsKey(wc)) {
                 w = wc;
@@ -86,6 +89,7 @@ public class LZWCompression {
         if (!w.equals("")) {
             codes.add(dictionary.get(w));            
         }
+        dis.close();
         
         return codes;
     }
@@ -96,7 +100,7 @@ public class LZWCompression {
      * @return Initialized HashMap<String, Integer> dictionary.
      */
     public HashMap<String, Integer> initializeDictionary() {
-        HashMap<String, Integer> dictionary = new HashMap<>(1024);
+        HashMap<String, Integer> dictionary = new HashMap<>(65536);
         for (int i = 0; i < 256; i++) {
             dictionary.put(""+ (char) (i), i);
         }

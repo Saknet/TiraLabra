@@ -2,6 +2,10 @@ package LZ77;
 
 import IO.BinaryInput;
 import IO.BinaryOutput;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -51,14 +55,14 @@ public class LZ77CompressionTest {
         m.setDistance(2);
         m.setLength(3);
         m.setStartPointer(3);
-        FileOutputStream fos = new FileOutputStream("testfiles/lz77writeblock.txt");
-        BinaryOutput bo = new BinaryOutput(fos);
+        DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(new FileOutputStream("testfiles/lz77writeblock.txt")));
+        BinaryOutput bo = new BinaryOutput(dos);
         lz77c.writeBlock(buffer, m, bo);
-        fos.close();
-        FileInputStream fis = new FileInputStream("testfiles/lz77writeblock.txt");
-        BinaryInput bi = new BinaryInput(fis);
+        dos.close();
+        DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream("testfiles/lz77writeblock.txt")));
+        BinaryInput bi = new BinaryInput(dis);
         String s = "";
-        while (fis.available() > 0) {
+        while (dis.available() > 0) {
             char c = bi.readChar();
             if (c == '$') {
                 s = s + c;

@@ -4,6 +4,10 @@ package huffmancoding;
 import IO.BinaryOutput;
 import datastructures.ArrayList;
 import datastructures.HashMap;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -27,12 +31,12 @@ public class HuffmanCompression {
      * @throws IOException 
      */
     public void run(String originalFile) throws FileNotFoundException, IOException {
-        FileOutputStream fos = createOutput(originalFile); 
+        DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(createOutput(originalFile))); 
         HashMap<Character, Integer> frequencies = addFrequencies(originalFile);
         TreeBuilder tree = new TreeBuilder();
         Node root = tree.makeTree(frequencies);
         readTree(root, "");        
-        compressText(originalFile, fos, frequencies);
+        compressText(originalFile, dos, frequencies);
     }
     
     /**
@@ -57,17 +61,17 @@ public class HuffmanCompression {
      * @throws java.io.IOException  
      */
     public HashMap<Character, Integer> addFrequencies(String originalFile) throws IOException {
-        FileInputStream fis = new FileInputStream(originalFile);
+        DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(originalFile)));
         HashMap<Character, Integer> frequencies = new HashMap<>();
-        while (fis.available() > 0) {
-            char c = (char) fis.read();
+        while (dis.available() > 0) {
+            char c = (char) dis.read();
             if (frequencies.containsKey(c)) {
                 frequencies.put(c, frequencies.get(c) + 1);
             } else {
                 frequencies.put(c, 1);
             }
         }
-        fis.close();
+        dis.close();
         
         return frequencies;
     }
@@ -117,13 +121,14 @@ public class HuffmanCompression {
      * @param frequencies HashMap<Character, Integer>, contains symbols and their frequencies.
      * @throws IOException 
      */
-    public void compressText(String originalFile, FileOutputStream fos, HashMap<Character, Integer> frequencies) throws IOException {
-        FileInputStream fis = new FileInputStream(originalFile);
-        BinaryOutput bo = new BinaryOutput(fos);
+    public void compressText(String originalFile, DataOutputStream dos, HashMap<Character, Integer> frequencies) throws IOException {
+        DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(originalFile)));
+        BinaryOutput bo = new BinaryOutput(dos);
         writeFrequenciesToFile(frequencies, bo);
-        while (fis.available() > 0) {
-            writeFile(bo, (char) fis.read());
+        while (dis.available() > 0) {
+            writeFile(bo, (char) dis.read());
         }    
+        dis.close();
         writeFile(bo, '£');
         bo.close();
     }

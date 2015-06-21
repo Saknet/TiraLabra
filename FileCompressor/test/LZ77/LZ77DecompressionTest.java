@@ -1,6 +1,8 @@
 
 package LZ77;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import org.junit.After;
@@ -36,24 +38,24 @@ public class LZ77DecompressionTest {
     
     @Test
     public void runTest() throws IOException {
-        FileInputStream fisa = new FileInputStream("testfiles/lz77full.txt");
+        DataInputStream disa = new DataInputStream(new BufferedInputStream(new FileInputStream("testfiles/lz77full.txt")));
         String a = "";
-        while (fisa.available() > 0) {
-            char c = (char) fisa.read();
+        while (disa.available() > 0) {
+            char c = (char) disa.read();
             a = a + c;
         }
-        fisa.close();
+        disa.close();
         
         lz77c.run("testfiles/lz77full.txt");
         lz77d.run("testfiles/lz77full.txt.LZ77");
         
-        FileInputStream fisb = new FileInputStream("testfiles/lz77full.txt.7");
+        DataInputStream disb = new DataInputStream(new BufferedInputStream(new FileInputStream("testfiles/lz77full.txt.7")));
         String b = "";
-        while (fisb.available() > 0) {
-            char c = (char) fisb.read();
+        while (disb.available() > 0) {
+            char c = (char) disb.read();
             b = b + c;
         }
-        fisb.close();
+        disb.close();
         
         Assert.assertEquals(a, b);
     }

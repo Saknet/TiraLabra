@@ -1,7 +1,7 @@
 
 package IO;
 
-import java.io.FileInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 
 /**
@@ -10,11 +10,11 @@ import java.io.IOException;
 public final class BinaryInput {
     
     /**
-     * FileOutputStream for output.
+     * DataInputStream for input.
      */
-    private FileInputStream fis;      // the input stream
+    private DataInputStream dis;      // the input stream
     /**
-     * 8-bit buffer for writing out bits.
+     * 8-bit buffer.
      */
     private int buffer;
     
@@ -24,12 +24,13 @@ public final class BinaryInput {
     private int bitsInBuffer;
 
    /**
-     * Create a binary input stream from an InputStream.
-     * @param fis
+     * Create a binary input stream from an DataInputStream.
+     * 
+     * @param dis DataInputStream.
      * @throws java.io.IOException
      */
-    public BinaryInput(FileInputStream fis) throws IOException {
-        this.fis = fis;
+    public BinaryInput(DataInputStream dis) throws IOException {
+        this.dis = dis;
         fillBuffer();
     }
 
@@ -39,7 +40,7 @@ public final class BinaryInput {
      * @throws IOException 
      */
     public void fillBuffer() throws IOException {
-        buffer = fis.read(); 
+        buffer = dis.read(); 
         bitsInBuffer = 8;
     }
 

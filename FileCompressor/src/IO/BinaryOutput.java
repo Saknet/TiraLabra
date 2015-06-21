@@ -1,7 +1,7 @@
 
 package IO;
 
-import java.io.FileOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
@@ -10,9 +10,9 @@ import java.io.IOException;
 public class BinaryOutput {
     
     /**
-     * FileOutputStream for output.
+     * DataOutputStream for output.
      */
-    private FileOutputStream fos;
+    private DataOutputStream dos;
     
     /**
      * 8-bit buffer for writing out bits.
@@ -25,12 +25,12 @@ public class BinaryOutput {
     private int bitsInBuffer;
     
     /**
-     * Creates binary output stream from OutputStream.
+     * Creates binary output stream from DataOutputStream.
      * 
-     * @param out FileOutputStream, the OutputStream.
+     * @param dos DataOutputStream used for output.
      */
-    public BinaryOutput(FileOutputStream out) {
-        this.fos = out;
+    public BinaryOutput(DataOutputStream dos) {
+        this.dos = dos;
     }
     
     /**
@@ -77,7 +77,7 @@ public class BinaryOutput {
         if (bitsInBuffer > 0) {
             buffer <<= (8 - bitsInBuffer);
         }
-        fos.write(buffer);
+        dos.write(buffer);
         bitsInBuffer = 0;
         
     }
@@ -89,8 +89,8 @@ public class BinaryOutput {
      */
     public void close() throws IOException {
         clearBuffer();
-        fos.flush();
-        fos.close();
+        dos.flush();
+        dos.close();
     }     
     
     /**

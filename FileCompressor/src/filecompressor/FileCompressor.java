@@ -13,9 +13,18 @@ public class FileCompressor {
 
     public static void main(String[] args) throws IOException {
         if (args.length != 3) {
-            System.out.println("wrong command");
+            System.out.println("wrong input");
             System.exit(0);
         }
+        if (!args[1].equals("d") && !args[1].equals("c")) {
+            System.out.println("wrong command(use c for compress, d for decompress)");
+            System.exit(0);
+        }
+        if (!args[2].equals("w") && !args[2].equals("h") && !args[2].equals("7")) {
+            System.out.println("wrong command(use either w, h or 7, to choose algorithm)");
+            System.exit(0);
+        }
+        
         final long startTime = System.currentTimeMillis();
         if (args[1].equals("c") && args[2].equals("w")) {
             LZWCompression lzwc = new LZWCompression();    

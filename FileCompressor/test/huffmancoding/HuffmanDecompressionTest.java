@@ -3,6 +3,10 @@ package huffmancoding;
 
 import IO.BinaryInput;
 import datastructures.HashMap;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -67,9 +71,9 @@ public class HuffmanDecompressionTest {
     @Test
     public void decompressAndReadSymbolTest() throws IOException {
         hc.run("testfiles/huffmanfilefreqtest.txt"); 
-        BinaryInput bi = new BinaryInput(new FileInputStream("testfiles/huffmanfilefreqtest.txt.huffman"));
+        BinaryInput bi = new BinaryInput(new DataInputStream(new BufferedInputStream(new FileInputStream(("testfiles/huffmanfilefreqtest.txt.huffman")))));
         Node root = new TreeBuilder().makeTree(hd.readFrequenciesFromFile(bi));
-        hd.decompress(root, bi, hd.createOutput("testfiles/huffmanfilefreqtest.,txt.huffman"));
+        hd.decompress(root, bi, new DataOutputStream(new BufferedOutputStream(hd.createOutput("testfiles/huffmanfilefreqtest.,txt.huffman"))));
         
         FileInputStream fisb = new FileInputStream("testfiles/huffmanfilefreqtest.txt.h");
         boolean wrongSymbol = true;
@@ -86,7 +90,7 @@ public class HuffmanDecompressionTest {
     @Test
     public void readFrequenciesFromFileTest() throws IOException {
         hc.run("testfiles/readFrequenciesFromFile.txt");
-        BinaryInput bi = new BinaryInput(new FileInputStream("testfiles/readFrequenciesFromFile.txt.huffman"));  
+        BinaryInput bi = new BinaryInput(new DataInputStream(new BufferedInputStream(new FileInputStream("testfiles/readFrequenciesFromFile.txt.huffman"))));  
         HashMap<Character, Integer> freq = hd.readFrequenciesFromFile(bi);
         int a = freq.get('a');
         int b = freq.get('b');

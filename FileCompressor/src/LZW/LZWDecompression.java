@@ -4,6 +4,10 @@ package LZW;
 import IO.BinaryInput;
 import datastructures.ArrayList;
 import datastructures.HashMap;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -21,11 +25,11 @@ public class LZWDecompression {
      * @throws IOException 
      */
     public void run(String originalFile) throws FileNotFoundException, IOException {
-        FileInputStream fis = new FileInputStream(originalFile);
-        ArrayList<Integer> result = readFile(fis);
-        FileOutputStream fos = createOutput(originalFile);
+        DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(originalFile)));
+        ArrayList<Integer> result = readFile(dis);
+        DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(createOutput(originalFile)));
         HashMap<Integer, String> dictionary = initializeDictionary();
-        decompress(fos, dictionary, result);
+        decompress(dos, dictionary, result);
     }
     
     /**
@@ -37,9 +41,9 @@ public class LZWDecompression {
      * @param codes ArrayList<Integer>, used for decompressing the file. 
      * @throws IOException 
      */
-    public void decompress(FileOutputStream fos, HashMap<Integer, String> dictionary, ArrayList<Integer> codes) throws IOException {
+    public void decompress(DataOutputStream dos, HashMap<Integer, String> dictionary, ArrayList<Integer> codes) throws IOException {
         String w = "" + (char)(int)codes.get(0);
-        writeFile(w, fos);
+        writeFile(w, dos);
         int size = 256;
         for (int i = 1; i < codes.size(); i++) {
             int code = codes.get(i);
@@ -50,23 +54,23 @@ public class LZWDecompression {
             else if (code == size) {
                 entry = w + w.charAt(0);
             } 
-            writeFile(entry, fos);
+            writeFile(entry, dos);
             dictionary.put(size++, w + entry.charAt(0));
             w = entry;
         }
-        fos.close();
+        dos.close();
     }
     
     /**
      * Method that writes the output file.
      * 
      * @param entry String, used for generating the output.
-     * @param fos FilOutputStream, used for output.
+     * @param dos FilOutputStream, used for output.
      * @throws IOException 
      */
-    public void writeFile(String entry, FileOutputStream fos) throws IOException {
+    public void writeFile(String entry, DataOutputStream dos) throws IOException {
         for (int i = 0; i < entry.length(); i++) {
-            fos.write((int) entry.charAt(i));   
+            dos.write((int) entry.charAt(i));   
         }    
     }
     
@@ -82,9 +86,8 @@ public class LZWDecompression {
         for (int i = 0; i < originalFile.length() - 3; i++) {
             newFile += originalFile.charAt(i);
         }
-        newFile += "d";     
-        FileOutputStream fos = new FileOutputStream(newFile);
-        return fos;
+        
+        return new FileOutputStream(newFile + "d");
     }
     
     /**
@@ -93,7 +96,7 @@ public class LZWDecompression {
      * @return Initialized HashMap<Integer, String> dictionary. 
      */
     public HashMap<Integer, String> initializeDictionary() {
-        HashMap<Integer, String>  dictionary = new HashMap<>(1024);
+        HashMap<Integer, String>  dictionary = new HashMap<>(65536);
         for (int i = 0; i < 256; i++) {
             dictionary.put(i, "" + (char)i);
         }
@@ -108,13 +111,14 @@ public class LZWDecompression {
      * @throws IOException 
      */
     
-    public ArrayList<Integer> readFile(FileInputStream fis) throws IOException {
+    public ArrayList<Integer> readFile(DataInputStream dis) throws IOException {
         ArrayList<Integer> codes = new ArrayList<>();
-        BinaryInput bi = new BinaryInput(fis);
-        while (fis.available() > 0) {
+        BinaryInput bi = new BinaryInput(dis);
+        while (dis.available() > 0) {
             int code = bi.readInt(24);
             codes.add(code);
         }
+        dis.close();
         return codes;
     }    
 }

@@ -4,6 +4,10 @@ package huffmancoding;
 import IO.BinaryInput;
 import IO.BinaryOutput;
 import datastructures.HashMap;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -19,13 +23,13 @@ public class HuffmanDecompression {
      * @throws IOException 
      */
     public void run(String originalFile) throws FileNotFoundException, IOException {
-        FileInputStream fis = new FileInputStream(originalFile);
-        BinaryInput bi = new BinaryInput(fis);
+        DataInputStream dis = new DataInputStream(new BufferedInputStream(new FileInputStream(originalFile)));
+        BinaryInput bi = new BinaryInput(dis);
         HashMap<Character, Integer> frequencies = readFrequenciesFromFile(bi);
         TreeBuilder tree = new TreeBuilder();
         Node root = tree.makeTree(frequencies);
-        FileOutputStream fos = createOutput(originalFile);
-        decompress(root, bi, fos);
+        DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(createOutput(originalFile)));
+        decompress(root, bi, dos);
     }
     
     /**
@@ -37,8 +41,8 @@ public class HuffmanDecompression {
      * @param fos FileOutputStream, file output stream used for writing output file.
      * @throws IOException 
      */
-    public void decompress(Node node, BinaryInput bi, FileOutputStream fos) throws IOException {
-        BinaryOutput bo = new BinaryOutput(fos);
+    public void decompress(Node node, BinaryInput bi, DataOutputStream dos) throws IOException {
+        BinaryOutput bo = new BinaryOutput(dos);
         while (true) {
             char symbol = findNextSymbol(node, bi);
             if (symbol == '£') {
@@ -47,7 +51,7 @@ public class HuffmanDecompression {
                 bo.writeByte(symbol);
             }
         }
-        bo.close();
+        dos.close();
     }
     
     /**
@@ -102,9 +106,8 @@ public class HuffmanDecompression {
         for (int i = 0; i < originalFile.length() - 7; i++) {
             newFile += originalFile.charAt(i);
         }
-        newFile += "h";     
-        FileOutputStream fos = new FileOutputStream(newFile);
-        return fos;
+        
+        return new FileOutputStream(newFile + "h");
     }
     
 }

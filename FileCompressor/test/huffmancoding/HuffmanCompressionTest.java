@@ -4,6 +4,10 @@ package huffmancoding;
 import IO.BinaryInput;
 import IO.BinaryOutput;
 import datastructures.HashMap;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -79,10 +83,11 @@ public class HuffmanCompressionTest {
     public void writeFrequenciesToFileTest() throws IOException {
         HashMap<Character, Integer> freq = hc.addFrequencies("testfiles/huffmanfilefreqtest.txt");
         Node root = treeBuilder.makeTree(freq);  
-        FileOutputStream fos = hc.createOutput("testfiles/huffmantreetoFileTest.txt");
-        BinaryOutput bo = new BinaryOutput(fos);
+        DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(hc.createOutput("testfiles/huffmantreetoFileTest.txt")));
+
+        BinaryOutput bo = new BinaryOutput(dos);
         hc.writeFrequenciesToFile(freq, bo);
-        fos.close();
+        dos.close();
         
         FileInputStream fis = new FileInputStream("testfiles/huffmantreetoFileTest.txt.huffman");
         char c = 'a';
@@ -113,8 +118,8 @@ public class HuffmanCompressionTest {
     public void writeFileTest() throws IOException {
         HashMap<Character, Integer> freq = hc.addFrequencies("testfiles/readFrequenciesFromFile.txt");
         hc.readTree(new TreeBuilder().makeTree(freq), "");
-        hc.writeFile(new BinaryOutput(hc.createOutput("testfiles/writeFileTest.txt")), 'c');
-        BinaryInput bi = new BinaryInput(new FileInputStream("testfiles/writeFileTest.txt"));
+        hc.writeFile(new BinaryOutput(new DataOutputStream(new BufferedOutputStream(hc.createOutput("testfiles/writeFileTest.txt")))), 'c');
+        BinaryInput bi = new BinaryInput(new DataInputStream(new BufferedInputStream(new FileInputStream("testfiles/writeFileTest.txt"))));
         boolean bit = bi.readBit();
         Assert.assertEquals(bit, true);
     }
